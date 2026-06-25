@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "北贸星桥 NorthBridge Trade - 东北中小企业外贸转型评测与服务导航 SaaS 原型",
+  "description": "北贸星桥 NorthBridge Trade - 东北企业外贸转型评测与服务商匹配 SaaS 原型",
   "scripts": {
     "dev": "node src/server.mjs",
     "start": "node src/server.mjs",
-    "check": "node --check src/data.mjs && node --check src/engine.mjs && node --check src/server.mjs && node --check public/app.js",
-    "test": "node test/engine.test.mjs"
+    "check": "node --check src/data.mjs && node --check src/engine.mjs && node --check src/server.mjs && node --check src/runtime-app.js && node --check public/app.js",
+    "test": "node test/engine.test.mjs && node test/server.test.mjs"
   },
   "engines": {
     "node": ">=20"

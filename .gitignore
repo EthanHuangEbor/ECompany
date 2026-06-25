@@ -5,6 +5,7 @@ node_modules/
 storage/
 uploads/
 tmp/
+output/
 
 # Earlier one-page research prototype kept locally, not part of this product repo.
 /index.html
