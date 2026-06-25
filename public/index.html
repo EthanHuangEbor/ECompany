@@ -32,6 +32,7 @@
           </label>
           <button id="runAssessmentBtn" class="primary-button" type="button">运行评测</button>
           <button id="aiReportBtn" class="secondary-button" type="button">生成 AI 报告</button>
+          <button id="openAiConfigBtn" class="ghost-button" type="button">配置 MiniMax</button>
           <button id="copyReportBtn" class="ghost-button" type="button">复制报告</button>
         </div>
 
@@ -266,6 +267,77 @@
           </div>
         </section>
       </main>
+    </div>
+
+    <div id="aiConfigModal" class="modal-backdrop" hidden>
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="aiConfigTitle">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">Runtime AI Settings</p>
+            <h3 id="aiConfigTitle">MiniMax API 配置</h3>
+          </div>
+          <button id="closeAiConfigBtn" class="icon-button" type="button" aria-label="关闭">×</button>
+        </div>
+
+        <div class="modal-body">
+          <label class="toggle-row">
+            <input id="aiEnabledInput" type="checkbox" />
+            <span>启用 AI 报告润色</span>
+          </label>
+
+          <label class="field">
+            <span>Provider</span>
+            <select id="aiProviderInput">
+              <option value="minimax">MiniMax</option>
+              <option value="openai">OpenAI Responses</option>
+            </select>
+          </label>
+
+          <div class="config-grid">
+            <label class="field">
+              <span>MiniMax API Key</span>
+              <input id="minimaxApiKeyInput" type="password" autocomplete="off" placeholder="只保存在当前服务端进程内存" />
+            </label>
+            <label class="field">
+              <span>MiniMax Model</span>
+              <input id="minimaxModelInput" type="text" placeholder="MiniMax-Text-01" />
+            </label>
+          </div>
+
+          <label class="field">
+            <span>MiniMax Endpoint</span>
+            <input id="minimaxEndpointInput" type="url" placeholder="https://api.minimax.chat/v1/text/chatcompletion_v2" />
+          </label>
+
+          <label class="field">
+            <span>Group ID（可选）</span>
+            <input id="minimaxGroupIdInput" type="text" placeholder="如果 MiniMax 控制台要求 GroupId，可填这里" />
+          </label>
+
+          <details class="advanced-config">
+            <summary>OpenAI 备用配置</summary>
+            <div class="config-grid">
+              <label class="field">
+                <span>OpenAI API Key</span>
+                <input id="openaiApiKeyInput" type="password" autocomplete="off" />
+              </label>
+              <label class="field">
+                <span>OpenAI Model</span>
+                <input id="openaiModelInput" type="text" placeholder="例如 gpt-5.4" />
+              </label>
+            </div>
+          </details>
+
+          <p id="aiConfigHint" class="config-hint">
+            API Key 不写入前端本地存储，不提交 Git。刷新页面仍可用；重启 Node 服务后需重新配置，或写入本机 .env。
+          </p>
+        </div>
+
+        <div class="modal-actions">
+          <button id="saveAiConfigBtn" class="primary-button" type="button">保存配置</button>
+          <button id="cancelAiConfigBtn" class="secondary-button" type="button">取消</button>
+        </div>
+      </section>
     </div>
 
     <script type="module" src="/app.js"></script>

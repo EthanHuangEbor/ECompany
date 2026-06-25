@@ -2,7 +2,8 @@ const state = {
   bootstrap: null,
   documents: [],
   assessment: null,
-  health: null
+  health: null,
+  aiConfig: null
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -129,6 +130,68 @@ async function generateAiReport() {
     $("#reportOutput").textContent = `报告生成失败：${error.message}`;
   } finally {
     button.textContent = "生成 AI 报告";
+    button.disabled = false;
+  }
+}
+
+async function loadAiConfig() {
+  state.aiConfig = await api("/api/ai/config");
+  $("#aiEnabledInput").checked = state.aiConfig.enabled;
+  $("#aiProviderInput").value = state.aiConfig.provider || "minimax";
+  $("#minimaxApiKeyInput").value = "";
+  $("#minimaxApiKeyInput").placeholder = state.aiConfig.minimax?.apiKeySet
+    ? `已配置：${state.aiConfig.minimax.apiKeyPreview}`
+    : "只保存在当前服务端进程内存";
+  $("#minimaxModelInput").value = state.aiConfig.minimax?.model || "MiniMax-Text-01";
+  $("#minimaxEndpointInput").value = state.aiConfig.minimax?.endpoint || "https://api.minimax.chat/v1/text/chatcompletion_v2";
+  $("#minimaxGroupIdInput").value = "";
+  $("#minimaxGroupIdInput").placeholder = state.aiConfig.minimax?.groupIdSet ? "已配置，留空则保持不变" : "如果 MiniMax 控制台要求 GroupId，可填这里";
+  $("#openaiApiKeyInput").value = "";
+  $("#openaiApiKeyInput").placeholder = state.aiConfig.openai?.apiKeySet ? `已配置：${state.aiConfig.openai.apiKeyPreview}` : "";
+  $("#openaiModelInput").value = state.aiConfig.openai?.model || "";
+}
+
+async function openAiConfig() {
+  await loadAiConfig();
+  $("#aiConfigModal").hidden = false;
+  $("#minimaxApiKeyInput").focus();
+}
+
+function closeAiConfig() {
+  $("#aiConfigModal").hidden = true;
+}
+
+async function saveAiConfig() {
+  const payload = {
+    enabled: $("#aiEnabledInput").checked,
+    errorFallback: true,
+    provider: $("#aiProviderInput").value,
+    minimax: {
+      apiKey: $("#minimaxApiKeyInput").value.trim(),
+      model: $("#minimaxModelInput").value.trim(),
+      endpoint: $("#minimaxEndpointInput").value.trim(),
+      groupId: $("#minimaxGroupIdInput").value.trim()
+    },
+    openai: {
+      apiKey: $("#openaiApiKeyInput").value.trim(),
+      model: $("#openaiModelInput").value.trim()
+    }
+  };
+
+  const button = $("#saveAiConfigBtn");
+  button.textContent = "保存中";
+  button.disabled = true;
+  try {
+    state.aiConfig = await api("/api/ai/config", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+    closeAiConfig();
+    await detectHealth();
+  } catch (error) {
+    $("#aiConfigHint").textContent = `保存失败：${error.message}`;
+  } finally {
+    button.textContent = "保存配置";
     button.disabled = false;
   }
 }
@@ -433,7 +496,7 @@ async function detectHealth() {
   try {
     state.health = await api("/api/health");
     $("#serverStatus").classList.add("ok");
-    $("#aiStatusText").textContent = state.health.aiConfigured ? "AI 可用" : "规则模式";
+    $("#aiStatusText").textContent = state.health.aiEnabled && state.health.aiConfigured ? `${state.health.aiProvider} 可用` : "规则模式";
     $("#aiStatusDetail").textContent = state.health.aiEnabled
       ? state.health.aiConfigured
         ? "服务端已配置模型与密钥"
@@ -473,6 +536,13 @@ async function init() {
   $("#sampleSelect").addEventListener("change", (event) => applySample(event.target.value));
   $("#runAssessmentBtn").addEventListener("click", runAssessment);
   $("#aiReportBtn").addEventListener("click", generateAiReport);
+  $("#openAiConfigBtn").addEventListener("click", openAiConfig);
+  $("#closeAiConfigBtn").addEventListener("click", closeAiConfig);
+  $("#cancelAiConfigBtn").addEventListener("click", closeAiConfig);
+  $("#saveAiConfigBtn").addEventListener("click", saveAiConfig);
+  $("#aiConfigModal").addEventListener("click", (event) => {
+    if (event.target.id === "aiConfigModal") closeAiConfig();
+  });
   $("#copyReportBtn").addEventListener("click", copyReport);
   $("#documentInput").addEventListener("change", handleFiles);
   $("#profileForm").addEventListener("change", () => {

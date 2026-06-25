@@ -400,7 +400,8 @@ textarea {
 
 .primary-button,
 .secondary-button,
-.ghost-button {
+.ghost-button,
+.icon-button {
   min-height: 42px;
   border: 0;
   border-radius: 8px;
@@ -422,6 +423,17 @@ textarea {
   background: transparent;
   color: #eaf5ee;
   border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  min-height: 38px;
+  padding: 0;
+  background: var(--surface-2);
+  color: var(--ink);
+  font-size: 24px;
 }
 
 .file-input {
@@ -601,6 +613,101 @@ textarea {
   white-space: pre-wrap;
 }
 
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(11, 25, 17, 0.56);
+}
+
+.modal-backdrop[hidden] {
+  display: none;
+}
+
+.modal {
+  width: min(720px, 100%);
+  max-height: min(860px, calc(100vh - 48px));
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 30px 80px rgba(10, 20, 14, 0.32);
+}
+
+.modal-header,
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 23px;
+}
+
+.modal-body {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+}
+
+.modal-actions {
+  justify-content: flex-end;
+  border-top: 1px solid var(--line);
+  border-bottom: 0;
+}
+
+.modal-actions .secondary-button {
+  background: var(--surface-2);
+}
+
+.config-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+}
+
+.toggle-row input {
+  width: auto;
+}
+
+.advanced-config {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfdfb;
+}
+
+.advanced-config summary {
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.advanced-config .config-grid {
+  margin-top: 12px;
+}
+
+.config-hint {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 13px;
+}
+
 @media (max-width: 1180px) {
   .app-shell {
     grid-template-columns: 1fr;
@@ -645,6 +752,7 @@ textarea {
   .nav-list,
   .form-grid,
   .check-field,
+  .config-grid,
   .partner-grid,
   .kpi-grid,
   .mini-metrics {

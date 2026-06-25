@@ -18,15 +18,17 @@ npm start
 
 打开 `http://127.0.0.1:5178`。
 
-AI 默认关闭。需要接入 OpenAI Responses API 时：
+AI 默认关闭。演示时可以直接在页面左侧点击“配置 MiniMax”，输入 MiniMax API Key、模型和 endpoint。该配置只保存在当前 Node 服务进程内存里，不写入浏览器 localStorage，也不会提交 Git。
+
+如果希望服务重启后仍保留配置，可以使用 `.env`：
 
 ```bash
 copy .env.example .env
-# 填入 OPENAI_API_KEY，并设置 AI_ENABLED=true
+# 填入 MINIMAX_API_KEY，并设置 AI_ENABLED=true
 npm start
 ```
 
-前端永远不读取 `OPENAI_API_KEY`。所有 AI 调用只从 `src/server.mjs` 发起；如果 key 缺失、AI 关闭或调用失败，系统自动使用规则模板报告。
+前端永远不读取 `MINIMAX_API_KEY` 或 `OPENAI_API_KEY`。所有 AI 调用只从 `src/server.mjs` 发起；如果 key 缺失、AI 关闭或调用失败，系统自动使用规则模板报告。
 
 ## 验证
 
