@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+node_modules/
+storage/
+uploads/
+tmp/
+
+# Earlier one-page research prototype kept locally, not part of this product repo.
+/index.html
+/app.js
+/styles.css
+
+*.log
+*.local

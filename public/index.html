@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>北贸星桥 NorthBridge Trade</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">北</div>
+          <div>
+            <p>NorthBridge Trade</p>
+            <h1>北贸星桥</h1>
+          </div>
+        </div>
+
+        <nav class="nav-list" aria-label="工作台导航">
+          <button class="nav-item active" data-tab="intake" type="button">企业体检</button>
+          <button class="nav-item" data-tab="assessment" type="button">评测结果</button>
+          <button class="nav-item" data-tab="network" type="button">资源星图</button>
+          <button class="nav-item" data-tab="guide" type="button">转型指南</button>
+          <button class="nav-item" data-tab="report" type="button">报告中心</button>
+        </nav>
+
+        <div class="side-panel">
+          <label class="field">
+            <span>演示企业</span>
+            <select id="sampleSelect"></select>
+          </label>
+          <button id="runAssessmentBtn" class="primary-button" type="button">运行评测</button>
+          <button id="aiReportBtn" class="secondary-button" type="button">生成 AI 报告</button>
+          <button id="copyReportBtn" class="ghost-button" type="button">复制报告</button>
+        </div>
+
+        <div class="system-status">
+          <span id="serverStatus" class="status-dot"></span>
+          <div>
+            <strong id="aiStatusText">规则模式</strong>
+            <p id="aiStatusDetail">AI 状态检测中</p>
+          </div>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">东北企业外贸转型评测与服务导航</p>
+            <h2>企业资料进来，规则先行，AI 只做报告润色</h2>
+          </div>
+          <div class="guardrail-row">
+            <span>公开来源库</span>
+            <span>高风险人工复核</span>
+            <span>无 AI 可演示</span>
+          </div>
+        </header>
+
+        <section class="kpi-grid">
+          <div class="kpi-card">
+            <span>综合准备度</span>
+            <strong id="overallScore">0.0</strong>
+            <p id="verdictTitle">尚未评测</p>
+          </div>
+          <div class="kpi-card">
+            <span>优先市场</span>
+            <strong id="bestMarket">-</strong>
+            <p id="marketStatus">等待输入</p>
+          </div>
+          <div class="kpi-card">
+            <span>推荐路径</span>
+            <strong id="bestRoute">-</strong>
+            <p id="routeNote">等待输入</p>
+          </div>
+          <div class="kpi-card">
+            <span>匹配资源</span>
+            <strong id="partnerCount">0</strong>
+            <p>候选机构</p>
+          </div>
+        </section>
+
+        <section id="tab-intake" class="tab-panel active">
+          <div class="panel-grid">
+            <form id="profileForm" class="surface profile-form">
+              <div class="section-heading">
+                <span>01</span>
+                <h3>企业画像</h3>
+              </div>
+
+              <label class="field">
+                <span>企业名称</span>
+                <input id="companyName" name="companyName" type="text" />
+              </label>
+
+              <div class="form-grid">
+                <label class="field">
+                  <span>省份/通道</span>
+                  <select id="province" name="province"></select>
+                </label>
+                <label class="field">
+                  <span>城市</span>
+                  <input id="city" name="city" type="text" />
+                </label>
+                <label class="field">
+                  <span>行业</span>
+                  <select id="industry" name="industry"></select>
+                </label>
+                <label class="field">
+                  <span>产品类别</span>
+                  <select id="productCategory" name="productCategory"></select>
+                </label>
+              </div>
+
+              <label class="field">
+                <span>产品与经营描述</span>
+                <textarea id="productDescription" name="productDescription" rows="4"></textarea>
+              </label>
+
+              <div class="form-grid">
+                <label class="field">
+                  <span>年产能</span>
+                  <input id="annualCapacity" name="annualCapacity" type="text" />
+                </label>
+                <label class="field">
+                  <span>目标市场</span>
+                  <select id="targetMarket" name="targetMarket"></select>
+                </label>
+                <label class="field">
+                  <span>外贸经验</span>
+                  <select id="exportExperience" name="exportExperience"></select>
+                </label>
+                <label class="field">
+                  <span>外贸团队</span>
+                  <select id="teamSize" name="teamSize"></select>
+                </label>
+                <label class="field">
+                  <span>语言能力</span>
+                  <input id="languageCapability" name="languageCapability" type="text" />
+                </label>
+                <label class="field">
+                  <span>预算状态</span>
+                  <select id="budget" name="budget"></select>
+                </label>
+              </div>
+
+              <fieldset class="check-field">
+                <legend>资质与能力</legend>
+                <label><input type="checkbox" name="certifications" value="食品生产许可" /> 食品生产许可</label>
+                <label><input type="checkbox" name="certifications" value="HACCP/ISO22000" /> HACCP/ISO22000</label>
+                <label><input type="checkbox" name="certifications" value="俄文/英文标签" /> 俄文/英文标签</label>
+                <label><input type="checkbox" name="certifications" value="冷链/保质期管理" /> 冷链/保质期管理</label>
+                <label><input id="hasExportRight" type="checkbox" name="hasExportRight" /> 已具备出口权或代理路径</label>
+              </fieldset>
+
+              <fieldset class="check-field">
+                <legend>现有渠道</legend>
+                <label><input type="checkbox" name="channels" value="国内经销" /> 国内经销</label>
+                <label><input type="checkbox" name="channels" value="外贸公司" /> 外贸公司</label>
+                <label><input type="checkbox" name="channels" value="B2B 平台" /> B2B 平台</label>
+                <label><input type="checkbox" name="channels" value="展会/商协会" /> 展会/商协会</label>
+              </fieldset>
+            </form>
+
+            <div class="surface upload-panel">
+              <div class="section-heading">
+                <span>02</span>
+                <h3>资料上传</h3>
+              </div>
+              <input id="documentInput" class="file-input" type="file" multiple />
+              <div class="upload-policy" id="uploadPolicy"></div>
+              <div id="documentList" class="document-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-assessment" class="tab-panel">
+          <div class="result-layout">
+            <div class="surface score-panel">
+              <div class="section-heading">
+                <span>03</span>
+                <h3>七维评分</h3>
+              </div>
+              <canvas id="radarCanvas" width="420" height="320" aria-label="七维评分雷达图"></canvas>
+            </div>
+            <div class="surface">
+              <div class="section-heading">
+                <span>04</span>
+                <h3>短板解释</h3>
+              </div>
+              <div id="dimensionList" class="dimension-list"></div>
+            </div>
+          </div>
+
+          <div class="decision-grid">
+            <div class="surface">
+              <div class="section-heading">
+                <span>05</span>
+                <h3>市场初筛</h3>
+              </div>
+              <div id="marketList" class="card-list"></div>
+            </div>
+            <div class="surface">
+              <div class="section-heading">
+                <span>06</span>
+                <h3>口岸/港口路径</h3>
+              </div>
+              <div id="routeList" class="card-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="tab-network" class="tab-panel">
+          <div class="surface">
+            <div class="section-heading">
+              <span>07</span>
+              <h3>北贸星图</h3>
+            </div>
+            <div id="partnerList" class="partner-grid"></div>
+          </div>
+        </section>
+
+        <section id="tab-guide" class="tab-panel">
+          <div class="decision-grid">
+            <div class="surface">
+              <div class="section-heading">
+                <span>08</span>
+                <h3>自检清单</h3>
+              </div>
+              <div id="checklist" class="checklist"></div>
+            </div>
+            <div class="surface">
+              <div class="section-heading">
+                <span>09</span>
+                <h3>90 天路线</h3>
+              </div>
+              <div id="actionPlan" class="timeline"></div>
+            </div>
+          </div>
+          <div class="surface">
+            <div class="section-heading">
+              <span>10</span>
+              <h3>风险与边界</h3>
+            </div>
+            <div id="riskList" class="risk-list"></div>
+          </div>
+        </section>
+
+        <section id="tab-report" class="tab-panel">
+          <div class="surface report-panel">
+            <div class="report-toolbar">
+              <div>
+                <p class="eyebrow">Assessment Report</p>
+                <h3>企业外贸转型诊断报告</h3>
+              </div>
+              <span id="reportMode" class="status-badge">规则模板</span>
+            </div>
+            <pre id="reportOutput"></pre>
+          </div>
+          <div class="surface">
+            <div class="section-heading">
+              <span>11</span>
+              <h3>数据来源</h3>
+            </div>
+            <div id="sourceList" class="source-list"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
